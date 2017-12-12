@@ -10,6 +10,9 @@ discovery.zen.minimum_master_nodes: 2
 
 path.repo: ["/usr/share/elasticsearch/data/backup/"]
 
+# allow url for restoring backups
+repositories.url.allowed_urls: ["http://il060/es_backup/*"]
+
 discovery.zen.ping.unicast.hosts: elasticsearch
 cluster.name: il.es.cluster
 node.name: ${HOSTNAME}
