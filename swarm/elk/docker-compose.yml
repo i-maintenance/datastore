@@ -46,7 +46,7 @@ services:
       - "5000:5000"
       - "9600:9600"
     environment:
-      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+      LS_JAVA_OPTS: "-Xmx512m -Xms512m"
     networks:
       - datastore
     depends_on:
@@ -55,7 +55,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 300M
+          memory: 1G
       replicas: 3
       placement:
         constraints: [node.role == worker]
@@ -80,7 +80,7 @@ services:
       resources:
         limits:
           cpus: "2"
-          memory: 300M
+          memory: 1G
       replicas: 2
       placement:
         constraints: [node.role == worker]
