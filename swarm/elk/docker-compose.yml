@@ -22,7 +22,7 @@ services:
       resources:
         limits:
           cpus: "1"
-          memory: 8.1G
+          memory: 10G
       replicas: 3
       update_config:
         parallelism: 2
