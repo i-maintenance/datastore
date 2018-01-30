@@ -54,7 +54,7 @@
     {
       "text": "%sh curl -is http://elasticsearch:9200/",
       "user": "anonymous",
-      "dateUpdated": "Dec 1, 2017 6:34:01 PM",
+      "dateUpdated": "Dec 22, 2017 6:14:07 PM",
       "config": {
         "colWidth": 12.0,
         "graph": {
@@ -79,11 +79,11 @@
         "forms": {}
       },
       "results": {
-        "code": "SUCCESS",
+        "code": "ERROR",
         "msg": [
           {
             "type": "TEXT",
-            "data": "HTTP/1.1 200 OK\r\ncontent-type: application/json; charset\u003dUTF-8\r\ncontent-length: 433\r\n\r\n{\n  \"name\" : \"IM0CPD8\",\n  \"cluster_name\" : \"docker-cluster\",\n  \"cluster_uuid\" : \"LABxoMl3RQO0ypv3GULNtQ\",\n  \"version\" : {\n    \"number\" : \"6.0.0\",\n    \"build_hash\" : \"8f0685b\",\n    \"build_date\" : \"2017-11-10T18:41:22.859Z\",\n    \"build_snapshot\" : false,\n    \"lucene_version\" : \"7.0.1\",\n    \"minimum_wire_compatibility_version\" : \"5.6.0\",\n    \"minimum_index_compatibility_version\" : \"5.0.0\"\n  },\n  \"tagline\" : \"You Know, for Search\"\n}\n"
+            "data": "ExitValue: 7"
           }
         ]
       },
@@ -91,9 +91,9 @@
       "jobName": "paragraph_1459607106706_-602147299",
       "id": "20160402-142506_1963327239",
       "dateCreated": "Apr 2, 2016 2:25:06 AM",
-      "dateStarted": "Dec 1, 2017 6:34:01 PM",
-      "dateFinished": "Dec 1, 2017 6:34:02 PM",
-      "status": "FINISHED",
+      "dateStarted": "Dec 22, 2017 6:14:02 PM",
+      "dateFinished": "Dec 22, 2017 6:14:02 PM",
+      "status": "ERROR",
       "progressUpdateIntervalMs": 500
     },
     {
@@ -361,15 +361,15 @@
   "name": "ElasticSearch Interpreter",
   "id": "2BF4K96P8",
   "angularObjects": {
-    "2D2WCQKTT:shared_process": [],
-    "2D2BM4W1G:shared_process": [],
-    "2CZR1BSNU:shared_process": [],
-    "2D372FCW9:shared_process": [],
-    "2D1RVVNU2:shared_process": [],
-    "2CYNGYKVJ:shared_process": [],
-    "2D2Y1WB34:shared_process": [],
-    "2D25EYBVW:shared_process": [],
-    "2D2VJQDW8:shared_process": []
+    "2D3GHEMAB:shared_process": [],
+    "2D1QX68GD:shared_process": [],
+    "2D29CCNXQ:shared_process": [],
+    "2D1VFR5TK:shared_process": [],
+    "2D22GP43D:shared_process": [],
+    "2D1E7AQDZ:shared_process": [],
+    "2D2N6NNJ2:shared_process": [],
+    "2D41B4A3X:shared_process": [],
+    "2D3DASCUM:shared_process": []
   },
   "config": {},
   "info": {}

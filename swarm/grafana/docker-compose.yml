@@ -1,0 +1,33 @@
+version: "3.4"
+services:
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3001:3000
+    volumes:
+      - grafanadata:/var/lib/grafana
+    networks:
+      - datastore
+    depends_on:
+      - elasticsearch
+    deploy:
+      resources:
+        limits:
+          cpus: "2"
+          memory: 1G
+      replicas: 1
+      placement:
+        constraints: [node.role == manager]
+      update_config:
+        parallelism: 1
+        delay: 10s
+      restart_policy:
+       condition: on-failure
+
+
+volumes:
+  grafanadata:
+    driver: local
+
+networks:
+  datastore:
