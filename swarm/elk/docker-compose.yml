@@ -93,7 +93,6 @@ services:
   grafana:
     image: grafana/grafana
     ports:
-<<<<<<< HEAD
       - 3001:3000
     volumes:
       - grafanadata:/var/lib/grafana
@@ -104,6 +103,7 @@ services:
     environment:
       GF_SECURITY_ADMIN_PASSWORD: admin
       ELASTICSEARCH_ENDPOINT: http://elasticsearch:9200
+      GF_SERVER_ROOT_URL: "%(protocol)s://%(domain)s/grafana/"
 #      ELASTICSEARCH_USER: ${ES_USERNAME}
 #      ELASTICSEARCH_PASSWORD: ${ES_PASSWORD}
     deploy:
