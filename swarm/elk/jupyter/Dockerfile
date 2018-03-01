@@ -41,6 +41,11 @@ RUN apt-get update \
 
 # Change jupyter_notebook_config.py
 COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
+COPY work/ /home/jovyan/work/
 
+RUN chmod -R 755 /home/jovyan
+RUN chown -R jovyan:users /home/jovyan
+
+#USER jovyan
 
 

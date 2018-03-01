@@ -121,12 +121,42 @@ services:
        condition: on-failure
 
 
+# https://github.com/jupyter/docker-stacks/tree/master/all-spark-notebook
+  jupyter-spark: 
+#    image: jupyter/datascience-notebook
+    image: 127.0.0.1:5001/jupyter
+    build: jupyter/
+    ports:
+      - 8888:8888
+    volumes:
+      - jupyterdata:/home/jovyan/work/dir1 
+    networks:
+      - datastore
+    deploy:
+      placement:
+        constraints: [node.role == worker]
+#      resources:
+#        limits:
+#          cpus: "1"
+#          memory: 8G
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+
+
+
+
 volumes:
   esdata:
     driver: local
   pipeline:
     driver: local
   grafanadata:
+    driver: local
+  jupyterdata:
     driver: local
 
 networks:
