@@ -129,7 +129,7 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - jupyterdata:/home/jovyan/work/dir1 
+      - jupyterdata:/home/jovyan/work 
     networks:
       - datastore
     deploy:
