@@ -8,7 +8,7 @@ network.host: ${HOSTNAME}
 # be sure to modify it appropriately for a production cluster deployment
 discovery.zen.minimum_master_nodes: 2
 
-path.repo: ["/usr/share/elasticsearch/data/backup/"]
+path.repo: ["/usr/share/elasticsearch/backup/"]
 
 # allow url for restoring backups
 repositories.url.allowed_urls: ["http://il060/es_backup/*"]
