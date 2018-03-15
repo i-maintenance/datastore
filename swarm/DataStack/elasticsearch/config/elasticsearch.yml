@@ -11,6 +11,7 @@ network.host: 0.0.0.0
 # Details: https://github.com/elastic/elasticsearch/pull/17288
 discovery.zen.minimum_master_nodes: 1
 
+path.repo: ["/usr/share/elasticsearch/backup/"]
 
 # allow url for restoring backups
 repositories.url.allowed_urls: ["http://il060/es_backup/*"]

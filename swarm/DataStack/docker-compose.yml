@@ -6,11 +6,12 @@ services:
       - esdata:/usr/share/elasticsearch/data
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
+#      - /mnt/il060-samba-share/esbackup:/usr/share/elasticsearch/backup
 #    ports:
 #      - "9200:9200"
 #      - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx8g -Xms8g"
+      ES_JAVA_OPTS: "-Xmx6g -Xms6g"
     healthcheck:
       test: "exit 0"
       interval: 1m00s
