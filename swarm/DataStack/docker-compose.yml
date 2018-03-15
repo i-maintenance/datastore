@@ -4,9 +4,14 @@ services:
     image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.2.2
     volumes:
       - esdata:/usr/share/elasticsearch/data
-      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
-      - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
       - /mnt/il060-samba-share/esbackup:/usr/share/elasticsearch/backup
+#      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+#      - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
+    configs:
+      - source: esconfig
+        target: /usr/share/elasticsearch/config/elasticsearch.yml
+      - source: eslog4jconf
+        target: /usr/share/elasticsearch/config/log4j2.properties
 #    ports:
 #      - "9200:9200"
 #      - "9300:9300"
@@ -177,3 +182,4 @@ configs:
     file: logstash/config/logstash.yml
   lspipeline:
     file: logstash/pipeline/logstash.conf
+
