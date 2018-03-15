@@ -15,17 +15,6 @@ RUN apt-get update && \
 
 ENV PYSPARK_PYTHON /opt/conda/bin/python
 
-# Change jupyter_notebook_config.py
-COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
-
-# not copy this folder, because we are using the samba share now
-#COPY work/ /home/jovyan/work/
-
-
-# these 2 commands where uncommented. it seems that it is also possible without it
-#RUN chmod -R 755 /home/jovyan
-#RUN chown -R jovyan:users /home/jovyan
-
 
 ## installing es-hadoop
 RUN apt-get update \
@@ -58,5 +47,16 @@ RUN set -ex \
  && fix-permissions /home/$NB_USER
 
 
+
+# Change jupyter_notebook_config.py
+COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
+
+# not copy this folder, because we are using the samba share now
+#COPY work/ /home/jovyan/work/
+
+
+# these 2 commands where uncommented. it seems that it is also possible without it
+#RUN chmod -R 755 /home/jovyan
+#RUN chown -R jovyan:users /home/jovyan
 
 
