@@ -17,7 +17,9 @@ ENV PYSPARK_PYTHON /opt/conda/bin/python
 
 # Change jupyter_notebook_config.py
 COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
-COPY work/ /home/jovyan/work/
+
+# not copy this folder, because we are using the samba share now
+#COPY work/ /home/jovyan/work/
 
 
 # these 2 commands where uncommented. it seems that it is also possible without it

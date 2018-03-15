@@ -6,7 +6,7 @@ services:
       - esdata:/usr/share/elasticsearch/data
       - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
       - ./elasticsearch/config/log4j2.properties:/usr/share/elasticsearch/config/log4j2.properties:ro
-#      - /mnt/il060-samba-share/esbackup:/usr/share/elasticsearch/backup
+      - /mnt/il060-samba-share/esbackup:/usr/share/elasticsearch/backup
 #    ports:
 #      - "9200:9200"
 #      - "9300:9300"
@@ -123,7 +123,7 @@ services:
         parallelism: 1
         delay: 10s
       restart_policy:
-       condition: on-failureesdata:/usr/share/elasticsearch/data
+       condition: on-failure
 
 
 # https://github.com/jupyter/docker-stacks/tree/master/all-spark-notebook
@@ -133,7 +133,8 @@ services:
     ports:
       - 8888:8888
     volumes:
-      - jupyterdata:/home/jovyan/work 
+      - /mnt/il060-samba-share/jupyter_notebooks/testing:/home/jovyan/work/testing
+#      - jupyterdata:/home/jovyan/work 
     networks:
       - datastore
     deploy:
@@ -152,7 +153,6 @@ services:
 
 
 
-
 volumes:
   esdata:
     driver: local
@@ -160,8 +160,8 @@ volumes:
     driver: local
   grafanadata:
     driver: local
-  jupyterdata:
-    driver: local
+#  jupyterdata:
+#    driver: local
 
 networks:
   datastore:
