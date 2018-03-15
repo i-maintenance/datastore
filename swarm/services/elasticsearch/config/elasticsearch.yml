@@ -1,24 +1,25 @@
-# set indexes to be created
-action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*,logstash*
+# set indexes to be created, as phenomenonTime must be the time filter.
+# action.auto_create_index: .security,.monitoring*,.watches,.triggered_watches,.watcher-history*,logstash*, .logs-*, data-*
+action.auto_create_index: true
+# index.mapper.dynamic: false
 
-network.host: ${HOSTNAME}
-#network.host: 0.0.0.0
+cluster.name: "docker-cluster"
+network.host: 0.0.0.0
 
-# this value is required because we set "network.host"
-# be sure to modify it appropriately for a production cluster deployment
-discovery.zen.minimum_master_nodes: 2
+# minimum_master_nodes need to be explicitly set when bound on a public IP
+# set to 1 to allow single node clusters
+# Details: https://github.com/elastic/elasticsearch/pull/17288
+discovery.zen.minimum_master_nodes: 1
 
-path.repo: ["/usr/share/elasticsearch/data/backup/"]
 
 # allow url for restoring backups
 repositories.url.allowed_urls: ["http://il060/es_backup/*"]
 
 discovery.zen.ping.unicast.hosts: elasticsearch
-cluster.name: il.es.cluster
+#cluster.name: il.es.cluster
 node.name: ${HOSTNAME}
 
 node.max_local_storage_nodes: 5 
-# defaults:
-#node.master: true
-#node.data: true
-#node.ingest: true
+
+
+

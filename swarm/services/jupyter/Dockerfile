@@ -13,39 +13,48 @@ RUN apt-get update && \
   rm -rf /var/lib/apt/lists/*
 
 
-#ENV PYTHONPYTH /usr/bin/python3
 ENV PYSPARK_PYTHON /opt/conda/bin/python
-#ENV PYSPARK_DRIVER_PYTHON /usr/bin/python3
-
-
-RUN pip install --no-cache-dir \
-    elasticsearch==6.1.1 && \
-    rm -rf /home/$NB_USER/.local && \
-    fix-permissions $CONDA_DIR && \
-    fix-permissions /home/$NB_USER
-
-
-## installing es-hadoop
-#RUN apt-get update && apt-get install -y --no-install-recommends git \
-# && git clone https://github.com/elastic/elasticsearch-hadoop.git && cd elasticsearch-hadoop \
-# && git checkout 6.2
-
-
-#RUN $SPARK_HOME/bin/spark-shell --packages org.elasticsearch:elasticsearch-hadoop:6.2.1
-
-#RUN git clone https://github.com/elastic/elasticsearch-hadoop.git
-
-RUN apt-get update \
- && curl -sL http://central.maven.org/maven2/org/elasticsearch/elasticsearch-hadoop/6.2.1/elasticsearch-hadoop-6.2.1.jar
-
 
 # Change jupyter_notebook_config.py
 COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
 COPY work/ /home/jovyan/work/
 
-RUN chmod -R 755 /home/jovyan
-RUN chown -R jovyan:users /home/jovyan
+
+# these 2 commands where uncommented. it seems that it is also possible without it
+#RUN chmod -R 755 /home/jovyan
+#RUN chown -R jovyan:users /home/jovyan
+
+
+## installing es-hadoop
+RUN apt-get update \
+ && curl -sL http://central.maven.org/maven2/org/elasticsearch/elasticsearch-hadoop/6.2.1/elasticsearch-hadoop-6.2.1.jar
+
+
+#RUN pip install --no-cache-dir && \
+#    elasticsearch==6.1.1 && \
+#    rm -rf /home/$NB_USER/.local && \
+#    fix-permissions $CONDA_DIR && \
+#    fix-permissions /home/$NB_USER
 
 #USER jovyan
+
+RUN apt-get remove r-base-core \
+ && gpg --keyserver keyserver.ubuntu.com --recv-key E084DAB9 \
+ && gpg -a --export E084DAB9 | sudo apt-key add -
+
+RUN set -ex \
+ && buildDeps=' \
+    elasticsearch==6.1.1 \
+    rpy2==2.9.2 \
+ ' \
+ && apt-get update \
+ && apt-get -y upgrade \
+ && apt-get -y install r-base \
+ && pip install --no-cache-dir $buildDeps \
+ && rm -rf /home/$NB_USER/.local \
+ && fix-permissions $CONDA_DIR \
+ && fix-permissions /home/$NB_USER
+
+
 
 
