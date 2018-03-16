@@ -31,7 +31,7 @@ services:
         limits:
           cpus: "1"
           memory: 10G
-      replicas: 3
+      replicas: 5
       update_config:
         parallelism: 2
         delay: 10s
