@@ -21,8 +21,6 @@ Plus the Kafka Adapter based on the components:
 
 1. [Requirements](#requirements)
 2. [Getting started](#getting-started)
-3. [Storage](#storage)
-   * [How can I persist Elasticsearch data?](#how-can-i-persist-elasticsearch-data)
 
 
 ## Requirements
