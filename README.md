@@ -1,4 +1,4 @@
-# Data-Stack composed by Elastic Stack, Grafana Jupyter, Spark and DB-adapter to stream data from a kafka broker
+# Data-Stack composed by Elastic Stack, Grafana, Jupyter, Spark and DB-adapter to stream data from a kafka broker
 
 
 Based on the following Components: (based on [deviantony's work](https://github.com/deviantony/docker-elk))
