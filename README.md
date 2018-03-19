@@ -1,7 +1,7 @@
 # Data-Stack composed by Elastic Stack, Grafana, Jupyter, Spark and DB-adapter to stream data from a kafka broker
 
 
-Based on the following Components: (based on [deviantony's work](https://github.com/deviantony/docker-elk))
+Based on the following Components:
 * [Elasticsearch 6.2](https://github.com/elastic/elasticsearch-docker)
 * [Logstash 6.2](https://github.com/elastic/logstash-docker)
 * [Kibana 6.2](https://github.com/elastic/kibana-docker)
@@ -12,7 +12,10 @@ Based on the following Components: (based on [deviantony's work](https://github.
 * [Anaconda3-5](https://www.anaconda.com/distribution/)
 
 
-Plus the Kafka Adapter based on the components:
+The designated way to feed data into the DataStack is from the
+[Apache Kafka](https://kafka.apache.org/) message bus via
+ the separate [Kafka Adapter](https://github.com/i-maintenance/DB-Adapter)
+ which is based on the components:
 * Kafka Client [librdkafka](https://github.com/geeknam/docker-confluent-python) version **0.11.1**
 * python kafka module [confluent-kafka-python](https://github.com/confluentinc/confluent-kafka-python) version **0.9.1.2**
 
@@ -21,6 +24,10 @@ Plus the Kafka Adapter based on the components:
 
 1. [Requirements](#requirements)
 2. [Getting started](#getting-started)
+    * [Local deployment](#Local-deployment)
+    * [Deploy in a docker swarm](#Deploy-in-a-docker-swarm)
+    * [Services](#Services)
+    * [Data Feeding](#Data-Feeding)
 
 
 ## Requirements
@@ -56,7 +63,12 @@ sudo docker-compose down -v
 
 
 
-### Deploy on swarm
+### Deploy in a docker swarm
+
+This section requires a running `docker swarm`. If not already done, check out
+[this video tutorial](https://www.youtube.com/watch?v=KC4Ad1DS8xU&t=192s)
+to set up a docker swarm cluster.
+
 
 Start the Data-Stack using `docker stack` on a manager node:
 
