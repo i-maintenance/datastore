@@ -132,7 +132,7 @@ services:
 
 
 # https://github.com/jupyter/docker-stacks/tree/master/all-spark-notebook
-  jupyter-spark: 
+  jupyter: 
     image: 127.0.0.1:5001/jupyter
     build: jupyter/
     ports:
