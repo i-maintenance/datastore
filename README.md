@@ -1,18 +1,21 @@
-# Data Analytics Stack with ELK Stack, Zeppelin, Spark and DB-adapter to stream data from a kafka broker
+# Data-Stack composed by Elastic Stack, Grafana, Jupyter, Spark and DB-adapter to stream data from a kafka broker
 
 
-Based on the official Docker images: (based on [deviantony's stack](https://github.com/deviantony/docker-elk))
-* [Elasticsearch 6.0](https://github.com/elastic/elasticsearch-docker)
-* [Logstash 6.0](https://github.com/elastic/logstash-docker)
-* [Kibana 6.0](https://github.com/elastic/kibana-docker)
-
-Zeppelin Notebook based on Hadoop, Spark and Anaconda:
+Based on the following Components:
+* [Elasticsearch 6.2](https://github.com/elastic/elasticsearch-docker)
+* [Logstash 6.2](https://github.com/elastic/logstash-docker)
+* [Kibana 6.2](https://github.com/elastic/kibana-docker)
+* [Grafana 5](http://docs.grafana.org/)
 * [Spark 2.1.1](http://spark.apache.org/docs/2.1.1)
 * [Hadoop 2.7.3](http://hadoop.apache.org/docs/r2.7.3)
 * [PySpark](http://spark.apache.org/docs/2.1.1/api/python)
 * [Anaconda3-5](https://www.anaconda.com/distribution/)
 
-Plus the Kafka Adapter based on the components:
+
+The designated way to feed data into the DataStack is from the
+[Apache Kafka](https://kafka.apache.org/) message bus via
+ the separate [Kafka Adapter](https://github.com/i-maintenance/DB-Adapter)
+ which is based on the components:
 * Kafka Client [librdkafka](https://github.com/geeknam/docker-confluent-python) version **0.11.1**
 * python kafka module [confluent-kafka-python](https://github.com/confluentinc/confluent-kafka-python) version **0.9.1.2**
 
@@ -21,8 +24,10 @@ Plus the Kafka Adapter based on the components:
 
 1. [Requirements](#requirements)
 2. [Getting started](#getting-started)
-3. [Storage](#storage)
-   * [How can I persist Elasticsearch data?](#how-can-i-persist-elasticsearch-data)
+    * [Local deployment](#Local-deployment)
+    * [Deploy in a docker swarm](#Deploy-in-a-docker-swarm)
+    * [Services](#Services)
+    * [Data Feeding](#Data-Feeding)
 
 
 ## Requirements
@@ -34,111 +39,108 @@ Plus the Kafka Adapter based on the components:
 
 ## Getting Started
 
-Start the ELK stack using `docker` on a manager node:
+This repository is divided into a swarm path and compose path, where the compose path
+serves as a staging environment.
 
+### Local deployment
+Start the Data-Stack in a local testing environment using `docker-compose`:
 
 ```bash
-docker service create --name registry --publish published=5001,target5000 registry:2
-docker service ls
--> service registry should be listed
-curl 127.0.0.1:5001/v2
-->{}
+cd swarm/dataStack/
+sudo docker-compose up --build -d
 
-
-cd ./elk
-docker stack deploy --compose-file docker-compose.yml elk
-
-
-cd ../db-adapter
-docker-compose up --build -d
--> should work properly
-docker-compose down --volume
-docker-compose push
-docker stack deploy --compose-file docker-compose.yml db-adapter
-
-
-cd ../zeppelin-spark
-docker-compose up --build -d
--> should work properly
-docker-compose down --volume
-docker-compose push
-docker stack deploy --compose-file docker-compose.yml db-adapter
-
+sudo docker-compose logs -f
 ```
 
 The flag `-d` stands for running it in background (detached mode).
-The docker-compose containers have to be shut down with the `--volume` flag.
 
 
-Watch the logs with:
-
+To stop the container use this command with the --volume (-v) flag.
 ```bash
-docker service logs -f <container-id>
+sudo docker-compose down -v
 ```
 
 
-Give Kibana about 2 minutes to initialize, then access the Kibana web UI by hitting
+
+
+### Deploy in a docker swarm
+
+This section requires a running `docker swarm`. If not already done, check out
+[this video tutorial](https://www.youtube.com/watch?v=KC4Ad1DS8xU&t=192s)
+to set up a docker swarm cluster.
+
+
+Start the Data-Stack using `docker stack` on a manager node:
+
+If not already done, start a registry instance to make the cumstomized jupyter-image
+deployable: (we are using port 5001, as logstash's default port is 5000)
+
+```bash
+sudo docker service create --name registry --publish published=5001,target=5000 registry:2
+curl 127.0.0.1:5001/v2/
+```
+This should output {}:
+
+
+Now register the customized images defined in the `docker-compose.yml`.
+```bash
+cd /swarm/dataStack
+sudo docker-compose build
+sudo docker-compose push
+```
+
+
+After that we can deploy the dataStack
+```bash
+sudo docker stack deploy --compose-file docker-compose.yml elk
+```
+
+
+Watch if everything worked fine with:
+```bash
+sudo docker service ls
+sudo docker stack ps db-adapter
+sudo docker service logs db-adapter_kafka -f
+```
+
+
+
+###  Services
+
+Give Kibana a minute to initialize, then access the Kibana web UI by hitting
 [http://localhost:5601](http://localhost:5601) with a web browser.
-tra
+The indexing of elasticsearch could last 15 minutes or more, so we have to be patient.
+On Kibana UI, DevTools we can trace the indexing success by hitting the REST request
+`GET _cat/indices`.
+
+
+
 By default, the stack exposes the following ports:
-* 8080: Swarm Visalizer
-* 5000: Logstash TCP input.
+* 5000: Logstash TCP input
 * 9200: Elasticsearch HTTP
-* 9300: Elasticsearch TCP transport
-* 5601: Kibana
-* 3030: Kafka-ELK HTTP
-* 8088: Zeppelin GUI
+* 9600: Logstash HTTP
+* **5601: Kibana:** User Interface for data in Elasticsearch
+* 3030: Kafka-DataStack Adapter HTTP: This one requires the db-adapter
+* **8080: Swarm Visalizer:** Watch all services on the swarm
+* **8888: Jupyter GUI:** Run Python and R notebooks with Spark support on elastic data
 
 
-The Kafka-Adapter should now automatically fetch data from the kafka message bus on topic **SensorData**. However, the selected topics can be specified in `kafka-adapter/Dockerfile` by setting the environment
-variables of logstash. KAFKA_TOPICS should be of the form "topic1,topic2,topic3,..."
 
-To test the ELK Stack itself (without the kafka adapter), inject example log entries via TCP by:
+### Data Feeding
+
+In order to feed the Data-Stack with data, we can use the
+[Kafka-DataStack Adapter](https://github.com/i-maintenance/DB-Adapter).
+
+The Kafka-Adapter automatically fetches data from the kafka message bus on
+topic **SensorData**. The selected topics can be specified in
+`.env` file of the Kafka-DataStack Adapter
+
+
+To test the Data-Stack itself (without the kafka adapter), inject example log entries via TCP by:
 
 ```bash
-$ nc localhost 5000 < /path/to/logfile.log
+$ nc hostname 5000 < /path/to/logfile.log
 ```
 
 
-## Initial setup
-
-### Default Kibana index pattern creation
-
-When Kibana launches for the first time, it is not configured with any index pattern. If you are using the Kafka Adapter and consume data, just follow the instructions in `Via the Kibana web UI` and your configuration will be saved in the mounted directory `elasticsearch/data/`.
-
-#### Via the Kibana web UI
-
-**NOTE**: You need to inject data into Logstash before being able to configure a Logstash index pattern via the Kibana web
-UI. Then all you have to do is hit the *Create* button.
-
-Refer to [Connect Kibana with
-Elasticsearch](https://www.elastic.co/guide/en/kibana/current/connect-to-elasticsearch.html) for detailed instructions
-about the index pattern configuration.
-
-#### On the command line
-
-Run this command to create a customized Logstash index pattern:
-
-```bash
-$ curl -XPUT -D- 'http://localhost:9200/.kibana/index-pattern/logstash-*' \
-    -H 'Content-Type: application/json' \
-    -d '{"title" : "logstash-*", "timeFieldName": "@timestamp", "notExpandable": true}'
-```
-
-This command will mark the Logstash index pattern as the default index pattern:
-
-```bash
-$ curl -XPUT -D- 'http://localhost:9200/.kibana/config/5.6.2' \
-    -H 'Content-Type: application/json' \
-    -d '{"defaultIndex": "logstash-*"}'
-```
-
-
-
-## Storage
-
-### How can I persist Elasticsearch data?
-
-The data stored in Elasticsearch over swarms will be distributed over the cluster.
-To capture the data, creating snapshots is needed. This [tutorial](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html) explains how to do that:
 
