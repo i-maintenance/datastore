@@ -27,6 +27,7 @@ The designated way to feed data into the DataStack is from the
     * [Local deployment](#Local-deployment)
     * [Deploy in a docker swarm](#Deploy-in-a-docker-swarm)
     * [Services](#Services)
+    * [Tracing](#Tracing)
     * [Data Feeding](#Data-Feeding)
 
 
@@ -96,14 +97,6 @@ sudo docker stack deploy --compose-file docker-compose.yml elk
 ```
 
 
-Watch if everything worked fine with:
-```bash
-sudo docker service ls
-sudo docker stack ps db-adapter
-sudo docker service logs db-adapter_kafka -f
-```
-
-
 
 ###  Services
 
@@ -123,6 +116,17 @@ By default, the stack exposes the following ports:
 * 3030: Kafka-DataStack Adapter HTTP: This one requires the db-adapter
 * **8080: Swarm Visalizer:** Watch all services on the swarm
 * **8888: Jupyter GUI:** Run Python and R notebooks with Spark support on elastic data
+
+
+### Tracing
+
+Watch if everything worked fine with:
+```bash
+sudo docker service ls
+sudo docker stack ps db-adapter
+sudo docker service logs db-adapter_kafka -f
+```
+
 
 
 
