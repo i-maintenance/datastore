@@ -29,6 +29,7 @@ The designated way to feed data into the DataStack is from the
     * [Services](#Services)
     * [Tracing](#Tracing)
     * [Data Feeding](#Data-Feeding)
+3. [Trouble-shooting](#Trouble-shooting)
 
 
 ## Requirements
@@ -145,6 +146,71 @@ To test the Data-Stack itself (without the kafka adapter), inject example log en
 ```bash
 $ nc hostname 5000 < /path/to/logfile.log
 ```
+
+
+
+## Trouble-shooting
+
+#### Can't apt-get update in Dockerfile:
+Restart the service
+
+```sudo service docker restart```
+
+or add the file `/etc/docker/daemon.json` with the content:
+```
+{
+    "dns": [your_dns, "8.8.8.8"]
+}
+```
+where `your_dns` can be found with the command:
+
+```bash
+nmcli device show <interfacename> | grep IP4.DNS
+```
+
+####  Traceback of non zero code 4 or 128:
+
+Restart service with
+```sudo service docker restart```
+
+or add your dns address as described above
+
+
+####  Elasticsearch crashes instantly:
+
+Check permission of `elasticsearch/data`.
+
+```bash
+sudo chown -r USER:USER .
+sudo chmod -R 777 .
+```
+
+or remove redundant docker installations or reinstall it
+
+
+#### Error starting userland proxy: listen tcp 0.0.0.0:9200: bind: address already in use
+
+Bring down other services, or change the hosts port number in docker-compose.yml.
+
+Find all running services by:
+```bash
+sudo docker ps
+```
+
+
+#### errors while removing docker containers:
+
+Remove redundant docker installations
+
+
+#### "entire heap max virtual memory areas vm.max_map_count [...] likely too low, increase to at least [262144]"
+
+Run on host machine:
+
+```bash
+sudo sysctl -w vm.max_map_count=262144
+```
+
 
 
 
