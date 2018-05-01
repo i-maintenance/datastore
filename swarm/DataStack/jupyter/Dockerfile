@@ -1,8 +1,6 @@
 # Copyright (c) Salzburg Research
 
-FROM jupyter/all-spark-notebook:1dc1481636a2
-
-
+FROM jupyter/all-spark-notebook
 LABEL maintainer="Christoph Schranz <iotlab@salzburgresarch.at>"
 
 USER root
@@ -114,6 +112,8 @@ RUN julia -e 'Pkg.init()' && \
     rm -rf $HOME/.local && \
     fix-permissions $JULIA_PKGDIR $CONDA_DIR/share/jupyter
 
+
+USER root
 
 # Change jupyter_notebook_config.py
 COPY jupyter_notebook_config.py /etc/jupyter/jupyter_notebook_config.py
