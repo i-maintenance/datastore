@@ -148,6 +148,60 @@ $ nc hostname 5000 < /path/to/logfile.log
 ```
 
 
+### Proxy Config
+
+If used behind an apache2 proxy, make sure to enable additional moduls
+```bash
+sudo a2enmod ssl rewrite proxy proxy_http proxy_wstunnel
+```
+
+Use the following config (note that the notebook will
+be available in https:/url/jupyter)
+
+```
+RewriteRule ^/jupyter$ jupyter/tree/ [R]
+                RewriteRule ^/jupyter/$ jupyter/tree/ [R]
+
+                <Location "/jupyter">
+                    ProxyPass        http://localhost:8888/jupyter
+                    ProxyPassReverse http://localhost:8888/jupyter
+                </Location>
+
+                <Location "/jupyter/api/kernels">
+                    ProxyPass        ws://localhost:8888/jupyter/api/kernels
+                    ProxyPassReverse ws://localhost:8888/jupyter/api/kernels
+                </Location>
+                <Location "/jupyter/terminals/websocket">
+                        ProxyPass        ws://localhost:8888/jupyter/terminals/websocket
+                        ProxyPassReverse ws://localhost:8888/jupyter/terminals/websocket
+                </Location>
+
+
+                #ProxyPass /jupyter/api/kernels/ ws://127.0.0.1:8888/jupyter/api/kernels/
+                #ProxyPassReverse /jupyter/api/kernels/ ws://127.0.0.1:8888/jupyter/api/kernels/
+
+                #ProxyPass /jupyter http://localhost:8888/jupyter connectiontimeout=15 timeout=30
+                #ProxyPassReverse /jupyter http://localhost:8888/jupyter
+
+                ProxyPass /jupyter/tree http://127.0.0.1:8888/jupyter/tree
+                ProxyPassReverse /jupyter/tree http://127.0.0.1:8888/jupyter/tree
+
+
+                #ProxyPass /jupyter http://127.0.0.1:8888/jupyter/
+                #ProxyPassReverse /jupyter http://127.0.0.1:8888/jupyter/
+
+
+                #<Location ~ "/(user/[^/]*)/(api/kernels/[^/]+/channels|terminals/websocket)/?">
+                #       ProxyPass ws://localhost:8888/jupyter
+                #       ProxyPassReverse ws://localhost:8888/jupyter
+                #</Location>
+```
+
+For more help, see [here](https://stackoverflow.com/questions/23890386/how-to-run-ipython-behind-an-apache-proxy/28819231#28819231)
+
+
+
+
 
 ## Trouble-shooting
 
