@@ -101,11 +101,9 @@ services:
 
 
   grafana:
-#    image: grafana/grafana:5.0.4
-    image: 127.0.0.1:5001/grafana
-    build: grafana/
+    image: grafana/grafana:5.2.1
     ports:
-      - 3000:3000
+      - 3002:3000
     volumes:
       -  /mnt/il060-samba-share/grafanadata:/var/lib/grafana
     networks:
