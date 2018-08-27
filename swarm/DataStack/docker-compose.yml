@@ -101,8 +101,8 @@ services:
 
 
   grafana:
-#    image: grafana/grafana:5.0.4
-    image: 127.0.0.1:5001/grafana
+    image: grafana/grafana:5.0.4
+    #image: 127.0.0.1:5001/grafana
     build: grafana/
     ports:
       - 3000:3000
@@ -125,7 +125,7 @@ services:
           memory: 3G
       replicas: 1
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
       update_config:
         parallelism: 1
         delay: 10s
