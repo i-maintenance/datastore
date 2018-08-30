@@ -62,7 +62,7 @@ To stop the container use this command with the --volume (-v) flag.
 sudo docker-compose down -v
 ```
 
-
+**Note** that the settings in `compose/` may not work properly.
 
 
 ### Deploy in a docker swarm
