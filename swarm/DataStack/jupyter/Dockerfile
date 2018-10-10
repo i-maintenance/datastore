@@ -7,7 +7,7 @@ USER root
 
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
-  git apt-utils gpg wget python-pip unzip && \
+  git apt-utils wget python-pip unzip && \
   apt-get clean && \
   rm -rf /var/lib/apt/lists/*
 

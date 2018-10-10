@@ -24,12 +24,13 @@ The designated way to feed data into the DataStack is from the
 
 1. [Requirements](#requirements)
 2. [Getting started](#getting-started)
-    * [Local deployment](#Local-deployment)
-    * [Deploy in a docker swarm](#Deploy-in-a-docker-swarm)
-    * [Services](#Services)
-    * [Tracing](#Tracing)
-    * [Data Feeding](#Data-Feeding)
-3. [Trouble-shooting](#Trouble-shooting)
+    * [Local deployment](#local-deployment)
+    * [Deploy in a docker swarm](#deploy-in-a-docker-swarm)
+    * [Services](#services)
+    * [Tracing](#tracing)
+    * [Data Feeding](#data-feeding)
+    * [Proxy Config](#proxy-config)
+3. [Trouble-shooting](#trouble-shooting)
 
 
 ## Requirements
@@ -37,6 +38,7 @@ The designated way to feed data into the DataStack is from the
 1. Install [Docker](https://www.docker.com/community-edition#/download) version **1.10.0+**
 2. Install [Docker Compose](https://docs.docker.com/compose/install/) version **1.6.0+**
 3. Clone this repository
+4. Configured [Docker Swarm](https://docs.docker.com/engine/swarm/)
 
 
 ## Getting Started
@@ -57,9 +59,9 @@ sudo docker-compose logs -f
 The flag `-d` stands for running it in background (detached mode).
 
 
-To stop the container use this command with the --volume (-v) flag.
+To stop the container use this command:
 ```bash
-sudo docker-compose down -v
+sudo docker-compose down
 ```
 
 **Note** that the settings in `compose/` may not work properly.

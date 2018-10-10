@@ -129,14 +129,14 @@ services:
 
 
 # https://github.com/jupyter/docker-stacks/tree/master/all-spark-notebook
-  jupyter:
+  jupyter: 
     image: 127.0.0.1:5001/jupyter
     build: jupyter/
     ports:
       - 8888:8888
     volumes:
       - /mnt/il060-samba-share/jupyter_notebooks/testing:/home/jovyan/work/testing
-#      - jupyterdata:/home/jovyan/work
+#      - jupyterdata:/home/jovyan/work 
     networks:
       - datastore
     deploy:
