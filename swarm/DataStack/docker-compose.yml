@@ -16,7 +16,7 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
-      ES_JAVA_OPTS: "-Xmx6g -Xms6g"
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
     healthcheck:
       test: "exit 0"
       interval: 1m00s

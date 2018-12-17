@@ -1,2 +1,4 @@
 compose/esdata/nodes
 .idea/
+swarm/DataStack/jupyter/Dockerfile.*
+swarm/DataStack/docker-compose.yml.save*
