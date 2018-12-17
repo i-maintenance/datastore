@@ -47,24 +47,23 @@ This repository is divided into a swarm path and compose path, where the compose
 serves as a staging environment.
 
 ### Local deployment
-Start the Data-Stack in a local testing environment using `docker-compose`:
+Start the Data-Stack in a local testing environment. Make sure the bash scripts are executable and you have write priviledges.
 
 ```bash
-cd swarm/dataStack/
-sudo docker-compose up --build -d
-
-sudo docker-compose logs -f
+git clone https://github.com/i-maintenance/datastore/
+cd datastore
+./start_datastore_local.sh
 ```
 
-The flag `-d` stands for running it in background (detached mode).
-
+To watch the output of the datastore:
+```bash
+./show_datastore_local.sh
+```
 
 To stop the container use this command:
 ```bash
-sudo docker-compose down
+./stop_datastore_local.sh
 ```
-
-**Note** that the settings in `compose/` may not work properly.
 
 
 ### Deploy in a docker swarm
@@ -86,19 +85,24 @@ curl 127.0.0.1:5001/v2/
 This should output {}:
 
 
-Now register the customized images defined in the `docker-compose.yml`.
+Now, deploy the Datastore in swarm. Make sure the bash scripts are executable, you have write priviledges and the **mounted volumes** in the compose-file `swarm/DataStack/swarm_docker-compose.yml` exist!
+
 ```bash
-cd /swarm/dataStack
-sudo docker-compose build
-sudo docker-compose push
+git clone https://github.com/i-maintenance/datastore/
+cd datastore
+./start_datastore_swarm.sh
 ```
 
-
-After that we can deploy the dataStack
+To watch the status of the datastore:
+It may take several minutes for the services to be ready!
 ```bash
-sudo docker stack deploy --compose-file docker-compose.yml elk
+./show_datastore_swarm.sh
 ```
 
+To stop the container use this command:
+```bash
+./stop_datastore_swarm.sh
+```
 
 
 ###  Services
@@ -118,7 +122,8 @@ By default, the stack exposes the following ports:
 * **5601: Kibana:** User Interface for data in Elasticsearch
 * 3030: Kafka-DataStack Adapter HTTP: This one requires the db-adapter
 * **8080: Swarm Visalizer:** Watch all services on the swarm
-* **8888: Jupyter GUI:** Run Python and R notebooks with Spark support on elastic data
+* **8888: Jupyter GUI:** Run Python and R notebooks with Spark support on elastic data, 
+the default password for Jupyter is `datastore`. Please change that using the config file `swarm/DataStack/jupyter/jupyter_notebook_config.py`
 
 
 ### Tracing
@@ -129,8 +134,6 @@ sudo docker service ls
 sudo docker stack ps db-adapter
 sudo docker service logs db-adapter_kafka -f
 ```
-
-
 
 
 ### Data Feeding
